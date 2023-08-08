@@ -1,5 +1,9 @@
+import Page from "../components/Page";
+
 const Home: React.FC = () => {
-  return <></>;
+  return <>
+  <Page />
+  </>;
 };
 
 export default Home;
