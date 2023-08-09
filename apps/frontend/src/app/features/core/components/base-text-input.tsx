@@ -6,19 +6,21 @@ export interface BaseTextInputProps
   testId: string;
   disabled?: boolean;
   error?: boolean;
+  placeholder?: string;
 }
 
 const BaseTextInput: React.ForwardRefRenderFunction<
   HTMLInputElement,
   BaseTextInputProps
 > = (
-  { id, testId, disabled, onChange, error, className, ...inputProps },
+  { id, testId, disabled, onChange, error, className, placeholder, ...inputProps },
   ref
 ) => (
   <input
     {...inputProps}
     id={id}
     type='text'
+    placeholder={placeholder}
     data-testid={testId}
     disabled={disabled}
     className={classNameBuilder(
@@ -33,7 +35,7 @@ const BaseTextInput: React.ForwardRefRenderFunction<
 );
 
 const commonClasses =
-  "h-14 w-full rounded-lg pl-3 bg-transparent-15 text-neutral-lightest placeholder:text-transparent-50";
+  "h-12 w-full rounded-lg pl-3 bg-transparent-15 text-neutral-lightest placeholder:text-transparent-50";
 const defaultClasses =
   "placeholder:hover:text-neutral-lightest placeholder:focus:text-neutral-lightest placeholder:transition placeholder:ease-dissolve placeholder:duration-250";
 const errorClasses = "border-2 border-red-800/25";
