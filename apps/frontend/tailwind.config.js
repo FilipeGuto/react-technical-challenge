@@ -16,6 +16,9 @@ module.exports = {
         base: {
           DEFAULT: '#EEEEEE',
         },
+        title: {
+          DEFAULT: '#585858',
+        },
         header: {
           DEFAULT: '#3A3C5A',
           100: '#9D59FF',
