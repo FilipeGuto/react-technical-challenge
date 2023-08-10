@@ -162,6 +162,9 @@ export default function index() {
             </DisclosureDropdown>
           </div>
         </div>
+        <div>
+          PRODUTOS
+        </div>
       </section>
     </div>
   )

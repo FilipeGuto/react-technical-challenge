@@ -26,8 +26,7 @@ const DisclosureDropdown: React.FC<DropdownProps> = ({
         <>
           <Disclosure.Button
             className={classNameBuilder(
-              "z-10 flex flex-row justify-between items-center rounded-b-lg",
-              "hover:bg-neutral-dark active:bg-[rgb(53,51,58)]",
+              "z-10 flex flex-row justify-between items-center rounded-sm",
               open ? "bg-neutral-dark" : "bg-neutral-darker",
               "transition ease-dissolve duration-250"
             )}
