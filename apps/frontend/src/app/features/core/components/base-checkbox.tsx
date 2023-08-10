@@ -1,6 +1,6 @@
-import CheckIcon from "@/assets/icons/checkbox-check.svg";
 import { classNameBuilder } from "@/helpers/class-name-builder";
 import React from "react";
+import { AiFillCheckSquare } from "react-icons/ai";
 
 export interface BaseCheckboxProps {
   id?: string;
@@ -27,22 +27,14 @@ const BaseCheckbox: React.ForwardRefRenderFunction<
     >
       <input
         {...otherProps}
-        className={classNameBuilder(
-          "relative appearance-none bg-gradient-102deg from-[#B6DCFB] from-10% to-[#E7F3FE] to-90% rounded-sm w-full h-full peer/checkbox",
-          "disabled:bg-neutral-light disabled:bg-none",
-          "after:opacity-100 after:checked:opacity-0 after:absolute after:inset-[2px] after:bg-neutral-darkest",
-          "transition duration-250 ease-dissolve before:transition before:duration-250 before:ease-dissolve",
-          disabled
-            ? "cursor-not-allowed"
-            : "before:opacity-0 before:group-hover/checkbox:opacity-100 before:absolute before:-inset-3 before:rounded-full before:bg-transparent-15 before:active:bg-transparent-15 cursor-pointer"
-        )}
+        className={'border-2 border-red-500 flex items-center justify-center w-full h-full rounded-md bg-white'}
         data-testid={dataTestId}
         type='checkbox'
         checked={checked}
         disabled={disabled}
         ref={ref}
       />
-      <CheckIcon
+      <AiFillCheckSquare
         className={classNameBuilder(
           "absolute -inset-[3px] text-neutral-darkest hidden pointer-events-none",
           "peer-checked/checkbox:block",
