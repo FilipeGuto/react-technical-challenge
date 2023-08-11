@@ -4,6 +4,8 @@ import { IoIosArrowForward } from 'react-icons/io'
 import React, { useEffect, useState } from 'react'
 import SelectComponent from '@/features/core/components/select/select-component'
 import Logo from '@/icons/Logo'
+import Payments from '@/icons/Payments'
+import Safe from '@/icons/Safe'
 import Button from '@/features/core/components/button'
 import Checkbox from '@/features/core/components/checkbox'
 import DisclosureDropdown from '@/features/core/components/disclosure-dropdown'
@@ -90,7 +92,8 @@ export default function index() {
   }
 
   return (
-    <div className='bg-base h-screen w-screen overflow-auto'>
+    <div className='overflow-hidden'>
+    <div className='bg-base h-full w-full pb-6'>
       <header className='bg-gradient-to-br from-header to-purple-800 h-20 w-full px-default flex justify-end items-center'>
         <div className="w-full" >
           <Logo />
@@ -199,6 +202,24 @@ export default function index() {
           }
         </div>
       </section>
+    </div>
+    <footer className='w-full h-footer bg-white'>
+        <div className='h-1/2 py-12 px-14 flex flex-col gap-6'>
+          <p className='text-title font-bold text-base'>Atendimento</p>
+          <p className='text-title text-sm'>Central de atendimento</p>
+          <p className='text-title text-sm'>Políticas de privacidade</p>
+          <hr className='mt-5'></hr>
+        </div>
+        <div className='h-1/2 py-12 px-14 flex flex-col gap-5'>
+          <p className='text-title text-base'>Formas de pagamento</p>
+          <div className='flex justify-between item-center'>
+            <span><Payments /></span>
+            <span>
+              <Safe />
+            </span>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

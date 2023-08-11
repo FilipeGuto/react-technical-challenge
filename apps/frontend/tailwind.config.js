@@ -33,6 +33,9 @@ module.exports = {
       padding: {
         'default': '64px',
       },
+      height: {
+        'footer': '400px',
+      },
     },
   },
   plugins: [],
