@@ -1,8 +1,8 @@
-import Page from "../components/Page";
+import HomePage from "./HomePage";
 
 const Home: React.FC = () => {
   return <>
-  <Page />
+  <HomePage />
   </>;
 };
 

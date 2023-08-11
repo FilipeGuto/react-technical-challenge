@@ -1,15 +1,18 @@
 import BaseTextInput from '@/features/core/components/base-text-input'
 import { AiOutlineHome } from 'react-icons/ai'
 import { IoIosArrowForward } from 'react-icons/io'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SelectComponent from '@/features/core/components/select/select-component'
 import Logo from '@/icons/Logo'
 import Button from '@/features/core/components/button'
 import Checkbox from '@/features/core/components/checkbox'
 import DisclosureDropdown from '@/features/core/components/disclosure-dropdown'
-import BaseCheckbox from '@/features/core/components/base-checkbox'
+import { Products, getProducts } from '../../services'
+import Card from '@/features/core/components/Card'
 
 export default function index() {
+  const [products, setProducts] = useState<Products>()
+
   const options = [
     { id: 1, name: 'Relevância'},
     { id: 2, name: 'Valor'},
@@ -36,6 +39,16 @@ export default function index() {
     { id: 2, name: 'R$ 50,00 - R$ 100,00'},
     { id: 3, name: 'R$ 100,00 - R$ 200,00'},
   ]
+
+  useEffect(() => {
+    getProducts()
+    .then((response) => {
+      setProducts(response)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }, [])
 
   const [checkCategory, setCheckCategory] = useState(
       new Array(category.length).fill(false)
@@ -70,6 +83,12 @@ export default function index() {
     setCheckPrice(updatedCheckedState)
   }
 
+  const handleClearAllFilters = () => {
+    setCheckCategory(new Array(category.length).fill(false))
+    setCheckColor(new Array(color.length).fill(false))
+    setCheckPrice(new Array(price.length).fill(false))
+  }
+
   return (
     <div className='bg-base h-screen w-screen overflow-auto'>
       <header className='bg-gradient-to-br from-header to-purple-800 h-20 w-full px-default flex justify-end items-center'>
@@ -84,7 +103,7 @@ export default function index() {
         </div>
       </header>
       <span className='h-20 w-full px-default flex'>
-        <div className='w-1/4 flex content-center items-center gap-2'>
+        <div className='w-1/5 flex content-center items-center gap-2'>
           <div><AiOutlineHome size={24} color={'#838383'} /></div>
           <div><IoIosArrowForward size={24} color={'#838383'} /></div>
           <p className='text-title text-sm font-bold'>Todos os produtos</p>
@@ -109,7 +128,11 @@ export default function index() {
             <p className='text-title text-base font-bold'>
               Filtrar por
             </p>
-            <Button className='text-title font-normal text-sm rounded-none px-0' dataTestId={'addFilter'}>
+            <Button
+              className='text-title font-normal text-sm rounded-none px-0' 
+              dataTestId={'addFilter'}
+              onClick={() => handleClearAllFilters()}
+              >
               Limpar filtro
             </Button>
           </div>
@@ -162,8 +185,18 @@ export default function index() {
             </DisclosureDropdown>
           </div>
         </div>
-        <div>
-          PRODUTOS
+        <div className='grid-cols-4 gap-5 inline-grid w-full'>
+          {
+            products?.data.map((item, index) => (
+              <div className='bg-white rounded-md h-80' key={index}>
+                <Card 
+                    name={item.name} 
+                    price={item.price}
+                    image={item.image.url}
+                  />
+              </div>
+            ))
+          }
         </div>
       </section>
     </div>

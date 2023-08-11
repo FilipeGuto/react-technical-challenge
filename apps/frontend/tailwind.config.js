@@ -23,6 +23,12 @@ module.exports = {
           DEFAULT: '#3A3C5A',
           100: '#9D59FF',
         },
+        price: {
+          DEFAULT: '#1C1C1C',
+        },
+        description: {
+          DEFAULT: '#8B96A5'
+        },
       },
       padding: {
         'default': '64px',
