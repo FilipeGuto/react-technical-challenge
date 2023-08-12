@@ -16,6 +16,7 @@ const DisclosureDropdown: React.FC<DropdownProps> = ({
 }) => {
   return (
     <Disclosure
+      defaultOpen={true}
       as='div'
       className={classNameBuilder(
         "flex flex-col rounded-lg overflow-hidden",
@@ -50,7 +51,7 @@ const DisclosureDropdown: React.FC<DropdownProps> = ({
             leaveFrom='translate-x-0'
             leaveTo='-translate-y-full'
           >
-            <Disclosure.Panel className='flex flex-col gap-3 justify-start max-h-32 overflow-auto'>
+            <Disclosure.Panel className='flex flex-col gap-3 justify-start max-h-34 overflow-auto'>
               {children}
             </Disclosure.Panel>
           </Transition>

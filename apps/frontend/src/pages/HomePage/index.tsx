@@ -105,34 +105,34 @@ export default function index() {
           />
         </div>
       </header>
-      <span className='h-20 w-full px-default flex'>
-        <div className='w-1/5 flex content-center items-center gap-2'>
+      <span className='h-20 w-full px-default flex max-sm:flex-col max-sm:gap-3 max-sm:mt-3'>
+        <div className='max-md:w-60 max-sm:min-w-full w-1/3 max-lg:w-96  lg:min-w-xs max-w-xs flex items-center gap-2'>
           <div><AiOutlineHome size={24} color={'#838383'} /></div>
           <div><IoIosArrowForward size={24} color={'#838383'} /></div>
           <p className='text-title text-sm font-bold'>Todos os produtos</p>
         </div>
-        <div className='w-3/5 grid content-center'>
-        <p className='text-title text-xl font-bold ml-10'>
+        <div className='max-sm:min-w-full max-sm:justify-start w-1/2 flex items-center'>
+        <p className='text-title text-xl font-bold ml-10 max-md:ml-0'>
           Produtos mais buscados
         </p>
         </div>
-        <div className='w-1/4 grid content-center'>
-          <p className='text-title text-sm font-normal text-right'>
+        <div className='max-sm:min-w-full max-sm:items-start w-1/2  flex max-xl:flex-col max-xl:items-end justify-center gap-0  xl:justify-end items-center xl:gap-3'>
+          <p className='text-title text-sm font-normal text-right max-sm:pl-1 max-xl:pr-2'>
             Produtos ordenados por:
           </p>
-        </div>
-        <div className=' grid content-center pl-5'>
+          <div className='z-10'>
           <SelectComponent options={options} />
         </div>
+        </div>
       </span>
-      <section className='h-full px-default flex gap-10'>
-        <div className='w-1/5 bg-white shadow-md rounded-md h-3/4 px-4 py-3'>
-          <div className='w-full flex justify-between items-center'>
+      <section className='h-full px-default flex gap-10 max-md:flex-col max-md:items-center'>
+        <div className='max-sm:mt-20 max-md:min-w-full min-lg:min-w-sv max-lg:w-96 lg:min-w-xs max-w-xs bg-white shadow-md rounded-md h-3/4 px-4 py-3'>
+          <div className='w-full flex items-center justify-between'>
             <p className='text-title text-base font-bold'>
               Filtrar por
             </p>
             <Button
-              className='text-title font-normal text-sm rounded-none px-0' 
+              className='text-title font-normal text-sm rounded-none px-0 pl-0 pr-0' 
               dataTestId={'addFilter'}
               onClick={() => handleClearAllFilters()}
               >
@@ -188,7 +188,7 @@ export default function index() {
             </DisclosureDropdown>
           </div>
         </div>
-        <div className='grid-cols-4 gap-5 inline-grid w-full'>
+        <div className='lg:grid-cols-2 md:grid-cols-1 2xl:grid-cols-4 xl:grid-cols-3 gap-5 inline-grid w-full'>
           {
             products?.data.map((item, index) => (
               <div className='bg-white rounded-md h-80' key={index}>
@@ -203,7 +203,7 @@ export default function index() {
         </div>
       </section>
     </div>
-    <footer className='w-full h-footer bg-white'>
+    <footer className='w-full h-footer bg-white  pb-14'>
         <div className='h-1/2 py-12 px-14 flex flex-col gap-6'>
           <p className='text-title font-bold text-base'>Atendimento</p>
           <p className='text-title text-sm'>Central de atendimento</p>
@@ -212,11 +212,9 @@ export default function index() {
         </div>
         <div className='h-1/2 py-12 px-14 flex flex-col gap-5'>
           <p className='text-title text-base'>Formas de pagamento</p>
-          <div className='flex justify-between item-center'>
-            <span><Payments /></span>
-            <span>
-              <Safe />
-            </span>
+          <div className='flex justify-between item-center max-lg:flex-col max-lg:gap-3'>
+            <Payments />
+            <Safe />
           </div>
         </div>
       </footer>

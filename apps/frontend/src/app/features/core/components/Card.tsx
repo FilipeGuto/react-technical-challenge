@@ -16,7 +16,7 @@ export default function Card({
   return (
     <div className='flex flex-col items-center h-full py-3 px-5 justify-around'>
       <div>
-        <Image src={image} alt={name} />
+        <Image src={image} alt={name} className='z-0' />
       </div>
       <div className='flex text-header flex-col items-start w-full'>
         <p className='text-price font-medium text-base'>
