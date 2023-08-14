@@ -7,13 +7,14 @@ export interface BaseTextInputProps
   disabled?: boolean;
   error?: boolean;
   placeholder?: string;
+  value?: string;
 }
 
 const BaseTextInput: React.ForwardRefRenderFunction<
   HTMLInputElement,
   BaseTextInputProps
 > = (
-  { id, testId, disabled, onChange, error, className, placeholder, ...inputProps },
+  { id, testId, disabled, onChange, value, error, className, placeholder, ...inputProps },
   ref
 ) => (
   <input
@@ -21,6 +22,8 @@ const BaseTextInput: React.ForwardRefRenderFunction<
     id={id}
     type='text'
     placeholder={placeholder}
+    onChange={onChange}
+    value={value}
     data-testid={testId}
     disabled={disabled}
     className={classNameBuilder(

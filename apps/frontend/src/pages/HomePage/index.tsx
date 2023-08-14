@@ -9,87 +9,177 @@ import Safe from '@/icons/Safe'
 import Button from '@/features/core/components/button'
 import Checkbox from '@/features/core/components/checkbox'
 import DisclosureDropdown from '@/features/core/components/disclosure-dropdown'
-import { Products, getProducts } from '../../services'
 import Card from '@/features/core/components/Card'
+import { Product, getProducts } from '@/features/products/actions'
+import { getCategories, getColors } from '@/features/filters/actions'
 
 export default function index() {
-  const [products, setProducts] = useState<Products>()
+  const [products, setProducts] = useState<Product[] | undefined>()
+  const [handleError, setHandleError] = useState<boolean>(false)
+  const [categories, setCategories] = useState<{
+    id: number
+    name: string
+    checked: boolean
+  }[]>()
+  const [colors, setColors] = useState<{
+    id: number
+    name: string
+    checked: boolean
+  }[]>()
+  const [priceRange, setPriceRange] = useState<{
+    id: number
+    range: number[]
+    checked: boolean
+  }[]>()
+  const [text, setText] = useState<string>('')
+  const [order, setOrder] = useState<string>('Relevância')
 
   const options = [
-    { id: 1, name: 'Relevância'},
-    { id: 2, name: 'Valor'},
-  ]
-
-  const category = [
-    { id: 1, name: 'Categoria 1'},
-    { id: 2, name: 'Categoria 2'},
-    { id: 3, name: 'Categoria 3'},
-    { id: 4, name: 'Categoria 4'},
-    { id: 1, name: 'Categoria 5'},
-    { id: 2, name: 'Categoria 6'},
-  ]
-
-  const color = [
-    { id: 1, name: 'Branco'},
-    { id: 2, name: 'Preto'},
-    { id: 3, name: 'Vermelho'},
-    { id: 4, name: 'Azul'},
+    'Relevância', 'Menor preço', 'Maior preço'
   ]
 
   const price = [
-    { id: 1, name: 'Até R$ 50,00'},
-    { id: 2, name: 'R$ 50,00 - R$ 100,00'},
-    { id: 3, name: 'R$ 100,00 - R$ 200,00'},
+    { id: 1, range: [0.01, 50.00]},
+    { id: 2, range: [50.01, 100.00]},
+    { id: 3, range: [100.01, 500.00]},
   ]
 
-  useEffect(() => {
-    getProducts()
-    .then((response) => {
-      setProducts(response)
+  const filteredProducts = products?.filter((product) => {
+    const matchesText = product.name.toLowerCase().includes(text.toLowerCase())
+    const matchesCategory = categories?.every((value) => !value.checked) ||
+      categories?.filter((category) => category.checked).some((value) => value.id === product.category.id)
+    const matchesColor = colors?.every((value) => !value.checked) ||
+      colors?.filter((color) => color.checked).some((value) => value.id === product.color.id)
+    const matchesPrice = priceRange?.every((value) => !value.checked) ||
+      priceRange?.filter((price) => price.checked).some((value) => value.range[0] <= product.price && value.range[1] >= product.price)
+
+    return matchesText && matchesCategory && matchesColor && matchesPrice
+    
+  }).sort((a, b) => {
+    if (order === 'Maior preço') {
+      return b.price - a.price
+    }
+    if (order === 'Menor preço') {
+      return a.price - b.price
+    }
+    return 0
+  })
+
+  const handleCheckCategory = (id: number) => {
+    const updatedCheckedState = categories?.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          checked: !item.checked,
+        }
+      }
+      return item
     })
-    .catch((error) => {
-      console.log(error)
-    })
-  }, [])
-
-  const [checkCategory, setCheckCategory] = useState(
-      new Array(category.length).fill(false)
-  )
-
-  const [checkColor, setCheckColor] = useState(
-      new Array(color.length).fill(false)
-  )
-
-  const [checkPrice, setCheckPrice] = useState(
-      new Array(price.length).fill(false)
-  )
-
-  const handleCheckCategory = (position: number) => {
-    const updatedCheckedState = checkCategory.map((item, index) =>
-      index === position ? !item : item
-    )
-    setCheckCategory(updatedCheckedState)
+    setCategories(updatedCheckedState)
   }
 
-  const handleCheckColor = (position: number) => {
-    const updatedCheckedState = checkColor.map((item, index) =>
-      index === position ? !item : item
+  const handleCheckColor = (id: number) => {
+    const updatedCheckedState = colors?.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          checked: !item.checked,
+        }
+      }
+      return item
+    }
     )
-    setCheckColor(updatedCheckedState)
+    setColors(updatedCheckedState)
   }
 
-  const handleCheckPrice = (position: number) => {
-    const updatedCheckedState = checkPrice.map((item, index) =>
-      index === position ? !item : item
-    )
-    setCheckPrice(updatedCheckedState)
+  const handleCheckPrice = (id: number) => {
+    const updatedCheckedState = priceRange?.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          checked: !item.checked,
+        }
+      }
+      return item
+    })
+    setPriceRange(updatedCheckedState)
   }
 
   const handleClearAllFilters = () => {
-    setCheckCategory(new Array(category.length).fill(false))
-    setCheckColor(new Array(color.length).fill(false))
-    setCheckPrice(new Array(price.length).fill(false))
+    setCategories(categories?.map((item) => {	
+      return {
+        ...item,
+        checked: false,
+      }
+    }))
+    setColors(colors?.map((item) => {
+      return {
+        ...item,
+        checked: false,
+      }
+    }))
+    setPriceRange(priceRange?.map((item) => {
+      return {
+        ...item,
+        checked: false,
+      }
+    }))
   }
+
+  const getAllProducts = () => {
+    getProducts()
+    .then((response) => {
+      setProducts(response.data)
+    })
+    .catch((error) => {
+      setHandleError(true)
+      console.log(error)
+    })
+  }
+
+  const getAllFilters = () => {
+    getCategories()
+    .then((response) => {
+      setCategories(response.data.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          checked: false
+        }
+      }))
+    })
+    .catch((error) => {
+      setHandleError(true)
+      console.log(error)
+    })
+
+    getColors()
+    .then((response) => {
+      setColors(response.data.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          checked: false
+        }
+      }))
+    })
+    .catch((error) => {
+      setHandleError(true)
+      console.log(error)
+    })
+
+    setPriceRange(price.map((item) => {
+      return {
+        id: item.id,
+        range: item.range,
+        checked: false
+      }
+    }))
+  }
+
+  useEffect(() => {
+    getAllProducts(), getAllFilters()
+  }, [])
 
   return (
     <div className='overflow-hidden'>
@@ -98,10 +188,12 @@ export default function index() {
         <div className="w-full" >
           <Logo />
         </div>
-        <div className='w-4/5'>
+        <div className='w-4/5 text-header'>
           <BaseTextInput 
             testId={'search'}
             placeholder={'O que você está procurando?'}
+            value={text}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
           />
         </div>
       </header>
@@ -121,10 +213,16 @@ export default function index() {
             Produtos ordenados por:
           </p>
           <div className='z-10'>
-          <SelectComponent options={options} />
+          <SelectComponent options={options} value={order} handleChange={setOrder}   />
         </div>
         </div>
       </span>
+      {
+        handleError ? (
+          <div className='w-full h-full flex justify-start'>
+            <p className='text-title text-lg font-bold'>Erro ao carregar os produtos</p>
+          </div>
+        ) : (
       <section className='h-full px-default flex gap-10 max-md:flex-col max-md:items-center'>
         <div className='max-sm:mt-20 max-md:min-w-full min-lg:min-w-sv max-lg:w-96 lg:min-w-xs max-w-xs bg-white shadow-md rounded-md h-3/4 px-4 py-3'>
           <div className='w-full flex items-center justify-between'>
@@ -142,12 +240,12 @@ export default function index() {
           <div className='text-black'>
             <DisclosureDropdown title='Categoria' className='w-full py-3 font-semibold'>
               {
-                category.map((item, index) => (
-                  <div className='flex items-center gap-2' key={index}>
+                categories?.map((item) => (
+                  <div className='flex items-center gap-2' key={item.id}>
                     <Checkbox
                       dataTestId={'category'}
-                      checked={checkCategory[index]}
-                      onChange={() => handleCheckCategory(index)}
+                      checked={item.checked}
+                      onChange={() => handleCheckCategory(item.id)}
                     />
                     <p className='text-title text-sm font-normal'>{item.name}</p>
                   </div>
@@ -158,12 +256,12 @@ export default function index() {
           <div className='text-black'>
             <DisclosureDropdown title='Cor' className='w-full py-3 font-semibold'>
               {
-                color.map((item, index) => (
-                  <div className='flex items-center gap-2' key={index}>
+                colors?.map((item) => (
+                  <div className='flex items-center gap-2' key={item.id}>
                     <Checkbox
                       dataTestId={'color'}
-                      checked={checkColor[index]}
-                      onChange={() => handleCheckColor(index)}
+                      checked={item.checked}
+                      onChange={() => handleCheckColor(item.id)}
                     />
                     <p className='text-title text-sm font-normal'>{item.name}</p>
                   </div>
@@ -174,14 +272,16 @@ export default function index() {
           <div className='text-black'>
             <DisclosureDropdown title='Preço' className='w-full py-3 font-semibold'>
               {
-                price.map((item, index) => (
-                  <div className='flex items-center gap-2' key={index}>
+                priceRange?.map((item) => (
+                  <div className='flex items-center gap-2' key={item.id}>
                     <Checkbox
                       dataTestId={'price'}
-                      checked={checkPrice[index]}
-                      onChange={() => handleCheckPrice(index)}
+                      checked={item.checked}
+                      onChange={() => handleCheckPrice(item.id)}
                     />
-                    <p className='text-title text-sm font-normal'>{item.name}</p>
+                    <p className='text-title text-sm font-normal'>{
+                      `R$ ${item.range[0].toFixed(2)} - R$ ${item.range[1].toFixed(2)}`
+                    }</p>
                   </div>
                 ))
               }
@@ -190,18 +290,27 @@ export default function index() {
         </div>
         <div className='lg:grid-cols-2 md:grid-cols-1 2xl:grid-cols-4 xl:grid-cols-3 gap-5 inline-grid w-full'>
           {
-            products?.data.map((item, index) => (
-              <div className='bg-white rounded-md h-80' key={index}>
+            filteredProducts?.length === 0 ? (
+              <div className='w-full h-full flex justify-start'>
+                    <p className='text-title text-lg font-bold'>Nenhum produto encontrado</p>
+                  </div>
+                ) : (
+                  filteredProducts?.map((item) => (
+                  <div className='bg-white rounded-md h-80' key={item.id}>
                 <Card 
                     name={item.name} 
                     price={item.price}
                     image={item.image.url}
                   />
               </div>
+                )
+              
             ))
           }
         </div>
       </section>
+        )
+      }
     </div>
     <footer className='w-full h-footer bg-white  pb-14'>
         <div className='h-1/2 py-12 px-14 flex flex-col gap-6'>
