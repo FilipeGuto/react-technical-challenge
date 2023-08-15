@@ -12,6 +12,39 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      maxHeight: {
+        'm': '450px',
+        's': '350px',
+        'p': '250px',
+      },
+      minWidth: {
+        'xs': '20rem',
+        'xl': '40rem',
+      },
+      colors: {
+        base: {
+          DEFAULT: '#EEEEEE',
+        },
+        title: {
+          DEFAULT: '#585858',
+        },
+        header: {
+          DEFAULT: '#3A3C5A',
+          100: '#9D59FF',
+        },
+        price: {
+          DEFAULT: '#1C1C1C',
+        },
+        description: {
+          DEFAULT: '#8B96A5'
+        },
+      },
+      padding: {
+        'default': '64px',
+      },
+      height: {
+        'footer': '400px',
+      },
     },
   },
   plugins: [],

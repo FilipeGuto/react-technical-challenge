@@ -1,4 +1,4 @@
-import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
+import { BsChevronDown } from "react-icons/bs";
 import { classNameBuilder } from "@/helpers/class-name-builder";
 import { Disclosure, Transition } from "@headlessui/react";
 import React from "react";
@@ -6,7 +6,7 @@ import Text from "./text";
 
 export interface DropdownProps {
   title?: string;
-  children?: string;
+  children?: React.ReactNode;
   className?: string;
 }
 const DisclosureDropdown: React.FC<DropdownProps> = ({
@@ -16,6 +16,7 @@ const DisclosureDropdown: React.FC<DropdownProps> = ({
 }) => {
   return (
     <Disclosure
+      defaultOpen={true}
       as='div'
       className={classNameBuilder(
         "flex flex-col rounded-lg overflow-hidden",
@@ -26,8 +27,7 @@ const DisclosureDropdown: React.FC<DropdownProps> = ({
         <>
           <Disclosure.Button
             className={classNameBuilder(
-              "z-10 flex flex-row justify-between items-center p-4 rounded-b-lg",
-              "hover:bg-neutral-dark active:bg-[rgb(53,51,58)]",
+              "z-10 flex flex-row justify-between items-center rounded-sm",
               open ? "bg-neutral-dark" : "bg-neutral-darker",
               "transition ease-dissolve duration-250"
             )}
@@ -35,13 +35,14 @@ const DisclosureDropdown: React.FC<DropdownProps> = ({
             <Text variant='h4' color='neutral-lightest'>
               {title}
             </Text>
-            <ChevronDownIcon
+            <BsChevronDown
               className={classNameBuilder(
                 "text-neutral-lightest transition ease-dissolve duration-250",
                 open ? "rotate-180" : ""
               )}
             />
           </Disclosure.Button>
+          <hr className='border-3 border-gray-300 my-3' />
           <Transition
             enter='transition ease-dissolve duration-250 transform'
             enterFrom='-translate-y-full'
@@ -50,10 +51,8 @@ const DisclosureDropdown: React.FC<DropdownProps> = ({
             leaveFrom='translate-x-0'
             leaveTo='-translate-y-full'
           >
-            <Disclosure.Panel className='p-4 -mt-2 pt-6 bg-neutral-darker/50 rounded-b-lg'>
-              <Text variant='p1' color='neutral-lightest'>
-                {children}
-              </Text>
+            <Disclosure.Panel className='flex flex-col gap-3 justify-start max-h-34 overflow-auto'>
+              {children}
             </Disclosure.Panel>
           </Transition>
         </>

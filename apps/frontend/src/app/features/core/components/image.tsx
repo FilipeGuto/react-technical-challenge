@@ -3,26 +3,30 @@ import NextImage from "next/image";
 type ImageProps = {
   className?: string;
   src?: string;
-  width?: number;
-  height?: number;
   alt?: string;
+  sizes?: string;
 };
-const Image = ({ className, src, width, height, alt }: ImageProps) => {
+const Image = ({ className, src, sizes, alt }: ImageProps) => {
   if (!src) {
     return (
-      <div className={`${className} bg-gray-200`} style={{ width, height }} />
+      <div className={`${className} bg-gray-200`} />
     );
   }
 
+  const urlImage = `${process.env.NEXT_PUBLIC_IMAGES_URL}${src}`
+
   return (
-    <NextImage
-      alt={alt || ""}
-      className={className}
-      src={`${process.env.NEXT_PUBLIC_IMAGES_URL}/${src}`}
-      layout='fixed'
-      width={width}
-      height={height}
-    />
+    <div className='w-44 h-48 relative'>
+      <NextImage
+        alt={alt || ""}
+        className={className}
+        loader={() => urlImage}
+        src={urlImage}
+        layout='fixed'
+        sizes={sizes}
+        fill
+      />
+    </div>
   );
 };
 
